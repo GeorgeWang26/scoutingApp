@@ -9,12 +9,12 @@
     tools:showIn="@layout/app_bar_main">
 
 
-
     <fragment
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="228dp"
         app:defaultNavHost="true"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -76,35 +76,6 @@
         android:text="Total Score:"
         android:textStyle="bold"
         app:layout_constraintHorizontal_bias="0.086"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:text="Climb Score:"
-        android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="0.087"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="50dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="106dp"
-        android:digits="1234567890"
-        android:ems="10"
-        android:hint="0"
-        android:inputType="textPersonName"
-        android:lines="1"
-        android:maxLength="4"
-        android:textSize="12dp"
-        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -194,12 +165,36 @@
             android:layout_height="wrap_content"
             android:text="Draw" />
     </RadioGroup>
-    <![CDATA[
+
+    <CheckBox
+        android:id="@+id/checkBox4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:text="Climb?"
+        app:layout_constraintHorizontal_bias="0.761"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/checkBox5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Autonomous?"
+        app:layout_constraintHorizontal_bias="0.882"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" /><![CDATA[
+
+
 
     tools:layout_editor_absoluteX="343dp"
         tools:layout_editor_absoluteY="109dp" />
     tools:layout_editor_absoluteX="37dp"
         tools:layout_editor_absoluteY="120dp" />
+
 
 ]]>
 </androidx.constraintlayout.widget.ConstraintLayout>
