@@ -1,8 +1,6 @@
 package com.example.scoutingapp;
 
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -14,10 +12,24 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+    RadioButton winButton;
+    RadioButton lossButton;
+    RadioButton drawButton;
+
+    EditText teamNumberField;
+    EditText scoredPointsField;
+
+    CheckBox canClimbBox;
+    CheckBox canAutoBox;
 
     private AppBarConfiguration mAppBarConfiguration;
     @Override
@@ -39,6 +51,16 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        winButton = (RadioButton) findViewById(R.id.winButton);
+        lossButton = (RadioButton) findViewById(R.id.lossButton);
+        drawButton = (RadioButton) findViewById(R.id.drawButton);
+
+        teamNumberField = (EditText) findViewById(R.id.teamNumberText);
+        scoredPointsField = (EditText) findViewById(R.id.scoreText);
+
+        canClimbBox = (CheckBox) findViewById(R.id.climbBox);
+        canAutoBox = (CheckBox) findViewById(R.id.autoBox);
+
         RadioGroup winGroup = (RadioGroup) findViewById(R.id.radioGroup);
 
         winGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -46,10 +68,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // find which radio button is selected
-                if(checkedId == R.id.radioButton) {
+                if(checkedId == R.id.winButton) {
                     Toast.makeText(getApplicationContext(), "choice: Win",
                             Toast.LENGTH_SHORT).show();
-                } else if(checkedId == R.id.radioButton2) {
+                } else if(checkedId == R.id.lossButton) {
                     Toast.makeText(getApplicationContext(), "choice: Loss",
                             Toast.LENGTH_SHORT).show();
                 } else {
@@ -58,6 +80,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+        });
+
+        Button sendButton = (Button)findViewById(R.id.button);
+        sendButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                String dataToSend = "";
+                if()
+            }
         });
     }
 
