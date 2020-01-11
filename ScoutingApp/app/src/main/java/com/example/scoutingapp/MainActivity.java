@@ -14,6 +14,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,6 +38,27 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        RadioGroup winGroup = (RadioGroup) findViewById(R.id.radioGroup);
+
+        winGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // find which radio button is selected
+                if(checkedId == R.id.radioButton) {
+                    Toast.makeText(getApplicationContext(), "choice: Win",
+                            Toast.LENGTH_SHORT).show();
+                } else if(checkedId == R.id.radioButton2) {
+                    Toast.makeText(getApplicationContext(), "choice: Loss",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "choice: Draw",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+        });
     }
 
     @Override
