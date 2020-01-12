@@ -9,5 +9,11 @@
             android:icon="@drawable/ic_record"
             android:title="Record Data"
             />
+
+        <item
+            android:id="@+id/nav_output"
+            android:icon="@drawable/ic_record"
+            android:title="Info on Other Teams"
+        />
     </group>
 </menu>
