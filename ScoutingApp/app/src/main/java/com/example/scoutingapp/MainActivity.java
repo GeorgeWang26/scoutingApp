@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     boolean connected;
 
     String SERVER_IP = "172.17.39.164";
-    int SERVER_PORT = 4265;
+    int SERVER_PORT = 4268;
 
     PrintWriter out;
     BufferedReader in;
@@ -196,6 +196,12 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("App Suspended");
         new Thread(new Thread3("BYE")).start();
         open = false;
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        System.out.println("App Opened");
+        open = true;
     }
 
 
