@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
 
         winGroup = (RadioGroup) findViewById(R.id.radioGroup);
 
+        teamNumberField.setEnabled(false);
+
         Thread1 = new Thread(new Thread1());
         Thread1.start();
 
