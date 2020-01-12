@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
     Socket socket;
 
+    boolean connected;
+
     String SERVER_IP = "172.17.39.164";
     int SERVER_PORT = 4258;
 
@@ -92,24 +94,6 @@ public class MainActivity extends AppCompatActivity {
 
         Thread1 = new Thread(new Thread1());
         Thread1.start();
-        winGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // find which radio button is selected
-                if(checkedId == R.id.winButton) {
-                    Toast.makeText(getApplicationContext(), "choice: Win",
-                            Toast.LENGTH_SHORT).show();
-                } else if(checkedId == R.id.lossButton) {
-                    Toast.makeText(getApplicationContext(), "choice: Loss",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "choice: Draw",
-                            Toast.LENGTH_SHORT).show();
-                }
-            }
-
-        });
 
         Button sendButton = (Button)findViewById(R.id.button);
         sendButton.setOnClickListener(new View.OnClickListener(){
@@ -117,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int RPGained = 0;
-                int bonusRP = 0;
+                boolean bonusRP = false;
                 String result;
                 String dataToSend = "POST, ";
                 String teamNumber = teamNumberField.getText().toString();
@@ -127,7 +111,8 @@ public class MainActivity extends AppCompatActivity {
                 if(buttonId != -1 &&
                         !teamNumber.equals("") &&
                         !scoredPoints.equals("") &&
-                        !opponentNumber.equals("")){
+                        !opponentNumber.equals("") &&
+                connected){
 
                     if(buttonId == winButton.getId()){
                         result = "2";
@@ -139,39 +124,43 @@ public class MainActivity extends AppCompatActivity {
                         result = "0";
                     }
 
-                    if(gotClimbRPBox.isChecked()){
-                        bonusRP++;
-                    }
                     if(gotBonusRPBox.isChecked()){
-                        bonusRP++;
+                        bonusRP = true;
+                        RPGained ++;
+                    }
+                    if(canClimbBox.isChecked()){
+                        RPGained ++;
                     }
 
-                    RPGained += bonusRP;
 
                     dataToSend += "teamNumber: 7476";
                     dataToSend += ", compName: Carleton";
                     dataToSend += ", scoutTeam: " +opponentNumber;
                     dataToSend += ", auto: " +canAutoBox.isChecked();
                     dataToSend += ", score: " +scoredPoints;
-                    dataToSend += ", climb: " +canClimbBox.isChecked();
                     dataToSend += ", bonusRP: " +bonusRP;
+                    dataToSend += ", climb: " +canClimbBox.isChecked();
                     dataToSend += ", result: " +result;
                     dataToSend += ", totalRP:" +RPGained;
 
                     teamNumberField.setText("7476");
                     opponentNumberField.setText("");
-                    scoredPointsField.setText("0");
+                    scoredPointsField.setText("");
 
-                    canClimbBox.setSelected(false);
-                    canAutoBox.setSelected(false);
+                    canClimbBox.setChecked(false);
+                    canAutoBox.setChecked(false);
 
-                    gotClimbRPBox.setSelected(false);
-                    gotBonusRPBox.setSelected(false);
+                    gotClimbRPBox.setChecked(false);
+                    gotBonusRPBox.setChecked(false);
 
                     winGroup.clearCheck();
 
                     new Thread(new Thread3(dataToSend)).start();
 
+                }
+                if(!connected){
+                    Toast.makeText(getApplicationContext(), "Error: No connection",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -184,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
             Socket socket;
             try {
                 socket = new Socket(SERVER_IP, SERVER_PORT);
+                connected = true;
                 output = new PrintWriter(socket.getOutputStream());
                 input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 runOnUiThread(new Runnable() {
@@ -195,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(new Thread2()).start();
             } catch (IOException e) {
                 e.printStackTrace();
+                connected = false;
             }
         }
     }
