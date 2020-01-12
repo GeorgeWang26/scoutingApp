@@ -1,5 +1,6 @@
 package com.example.scoutingapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import androidx.navigation.NavController;
@@ -31,8 +32,10 @@ public class MainActivity extends AppCompatActivity {
 
     Socket socket;
 
+    boolean connected;
+
     String SERVER_IP = "172.17.39.164";
-    int SERVER_PORT = 4258;
+    int SERVER_PORT = 4261;
 
     PrintWriter out;
     BufferedReader in;
@@ -54,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
 
     CheckBox gotClimbRPBox;
     CheckBox gotBonusRPBox;
-    CheckBox gotBonusRPBox2;
+
+    String compName;
 
     private AppBarConfiguration mAppBarConfiguration;
     @Override
@@ -75,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        Intent intent = getIntent();
+        compName = intent.getStringExtra(Main2Activity.EXTRA_MESSAGE);
+
+        Thread1 = new Thread(new Thread1());
+        Thread1.start();
+
         winButton = (RadioButton) findViewById(R.id.winButton);
         lossButton = (RadioButton) findViewById(R.id.lossButton);
         drawButton = (RadioButton) findViewById(R.id.drawButton);
@@ -88,30 +98,11 @@ public class MainActivity extends AppCompatActivity {
 
         gotClimbRPBox = (CheckBox) findViewById(R.id.climbingRPBox);
         gotBonusRPBox = (CheckBox) findViewById(R.id.bonusRPBox);
-        gotBonusRPBox2 = (CheckBox) findViewById(R.id.bonusRPBox2);
 
         winGroup = (RadioGroup) findViewById(R.id.radioGroup);
 
-        Thread1 = new Thread(new Thread1());
-        Thread1.start();
-        winGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        teamNumberField.setEnabled(false);
 
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // find which radio button is selected
-                if(checkedId == R.id.winButton) {
-                    Toast.makeText(getApplicationContext(), "choice: Win",
-                            Toast.LENGTH_SHORT).show();
-                } else if(checkedId == R.id.lossButton) {
-                    Toast.makeText(getApplicationContext(), "choice: Loss",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "choice: Draw",
-                            Toast.LENGTH_SHORT).show();
-                }
-            }
-
-        });
 
         Button sendButton = (Button)findViewById(R.id.button);
         sendButton.setOnClickListener(new View.OnClickListener(){
@@ -119,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int RPGained = 0;
-                int bonusRP = 0;
+                boolean bonusRP = false;
                 String result;
                 String dataToSend = "POST, ";
                 String teamNumber = teamNumberField.getText().toString();
@@ -129,7 +120,8 @@ public class MainActivity extends AppCompatActivity {
                 if(buttonId != -1 &&
                         !teamNumber.equals("") &&
                         !scoredPoints.equals("") &&
-                        !opponentNumber.equals("")){
+                        !opponentNumber.equals("") &&
+                connected){
 
                     if(buttonId == winButton.getId()){
                         result = "2";
@@ -141,30 +133,46 @@ public class MainActivity extends AppCompatActivity {
                         result = "0";
                     }
 
-                    if(gotClimbRPBox.isChecked()){
-                        bonusRP++;
-                    }
                     if(gotBonusRPBox.isChecked()){
-                        bonusRP++;
+                        bonusRP = true;
+                        RPGained ++;
                     }
-                    if(gotBonusRPBox2.isChecked()){
-                        bonusRP++;
+                    if(canClimbBox.isChecked()){
+                        RPGained ++;
                     }
 
-                    RPGained += bonusRP;
 
-                    dataToSend += "teamNumber: " +teamNumber;
-                    dataToSend += ", compName: Carleton";
+                    dataToSend += "teamNumber: 7476";
+                    dataToSend += ", compName: " +compName;
                     dataToSend += ", scoutTeam: " +opponentNumber;
                     dataToSend += ", auto: " +canAutoBox.isChecked();
                     dataToSend += ", score: " +scoredPoints;
-                    dataToSend += ", climb: " +canClimbBox.isChecked();
                     dataToSend += ", bonusRP: " +bonusRP;
+                    dataToSend += ", climb: " +canClimbBox.isChecked();
                     dataToSend += ", result: " +result;
                     dataToSend += ", totalRP:" +RPGained;
 
+                    teamNumberField.setText("7476");
+                    opponentNumberField.setText("");
+                    scoredPointsField.setText("");
+
+                    canClimbBox.setChecked(false);
+                    canAutoBox.setChecked(false);
+
+                    gotClimbRPBox.setChecked(false);
+                    gotBonusRPBox.setChecked(false);
+
+                    winGroup.clearCheck();
+
+
                     new Thread(new Thread3(dataToSend)).start();
 
+
+
+                }
+                if(!connected){
+                    Toast.makeText(getApplicationContext(), "Error: No connection",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -177,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
             Socket socket;
             try {
                 socket = new Socket(SERVER_IP, SERVER_PORT);
+                connected = true;
                 output = new PrintWriter(socket.getOutputStream());
                 input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 runOnUiThread(new Runnable() {
@@ -188,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(new Thread2()).start();
             } catch (IOException e) {
                 e.printStackTrace();
+                connected = false;
             }
         }
     }
