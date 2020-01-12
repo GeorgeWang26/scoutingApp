@@ -19,7 +19,25 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.net.UnknownHostException;
+
 public class MainActivity extends AppCompatActivity {
+
+    Socket socket;
+
+    String SERVER_IP = "172.17.39.164";
+    int SERVER_PORT = 4258;
+
+    PrintWriter out;
+    BufferedReader in;
+
+    Thread Thread1 = null;
 
     RadioGroup winGroup;
 
@@ -29,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
     EditText teamNumberField;
     EditText scoredPointsField;
+    EditText opponentNumberField;
 
     CheckBox canClimbBox;
     CheckBox canAutoBox;
@@ -52,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_home)
                 .setDrawerLayout(drawer)
                 .build();
-
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -63,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         teamNumberField = (EditText) findViewById(R.id.teamNumberText);
         scoredPointsField = (EditText) findViewById(R.id.scoreText);
+        opponentNumberField = (EditText) findViewById(R.id.opponentNumberText);
 
         canClimbBox = (CheckBox) findViewById(R.id.climbBox);
         canAutoBox = (CheckBox) findViewById(R.id.autoBox);
@@ -73,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
 
         winGroup = (RadioGroup) findViewById(R.id.radioGroup);
 
+        Thread1 = new Thread(new Thread1());
+        Thread1.start();
         winGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
             @Override
@@ -98,32 +119,142 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int RPGained = 0;
-                String dataToSend = "";
+                int bonusRP = 0;
+                String result;
+                String dataToSend = "POST, ";
                 String teamNumber = teamNumberField.getText().toString();
                 String scoredPoints = scoredPointsField.getText().toString();
+                String opponentNumber = opponentNumberField.getText().toString();
                 int buttonId = winGroup.getCheckedRadioButtonId();
                 if(buttonId != -1 &&
                         !teamNumber.equals("") &&
-                        !scoredPoints.equals("")){
+                        !scoredPoints.equals("") &&
+                        !opponentNumber.equals("")){
 
                     if(buttonId == winButton.getId()){
+                        result = "Win";
                         RPGained += 2;
                     }else if(buttonId == drawButton.getId()){
-                        RPGained += 1;
+                        result = "Draw";
+                        RPGained ++;
+                    }else{
+                        result = "Loss";
                     }
-                        
-                    Toast.makeText(getApplicationContext(), "choice: Loss",
-                            Toast.LENGTH_SHORT).show();
+
+                    if(gotClimbRPBox.isChecked()){
+                        bonusRP++;
+                    }
+                    if(gotBonusRPBox.isChecked()){
+                        bonusRP++;
+                    }
+                    if(gotBonusRPBox2.isChecked()){
+                        bonusRP++;
+                    }
+
+                    RPGained += bonusRP;
+
+                    dataToSend += "teamNumber: " +teamNumber;
+                    dataToSend += ", compName: Carleton";
+                    dataToSend += ", scoutName: " +opponentNumber;
+                    dataToSend += ", auto: " +canAutoBox.isChecked();
+                    dataToSend += ", score: " +scoredPoints;
+                    dataToSend += ", climb: " +canClimbBox.isChecked();
+                    dataToSend += ", bonusRP: " +bonusRP;
+                    dataToSend += ", result: " +result;
+                    dataToSend += ", Total RP Gain:" +RPGained;
+
+                    new Thread(new Thread3(dataToSend)).start();
+
                 }
             }
         });
     }
 
-    @Override
+    private PrintWriter output;
+    private BufferedReader input;
+    class Thread1 implements Runnable {
+        public void run() {
+            Socket socket;
+            try {
+                socket = new Socket(SERVER_IP, SERVER_PORT);
+                output = new PrintWriter(socket.getOutputStream());
+                input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
+                new Thread(new Thread2()).start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    class Thread2 implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    final String message = input.readLine();
+                    if (message != null) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                            }
+                        });
+                    } else {
+                        Thread1 = new Thread(new Thread1());
+                        Thread1.start();
+                        return;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    class Thread3 implements Runnable {
+        private String message;
+        Thread3(String message) {
+            this.message = message;
+        }
+        @Override
+        public void run() {
+            output.write(message);
+            output.flush();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            });
+        }
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+
+    public void listenSocket(){
+//Create socket connection
+        try{
+            socket = new Socket("172.17.39.164", 4258);
+            out = new PrintWriter(socket.getOutputStream(),
+                    true);
+            in = new BufferedReader(new InputStreamReader(
+                    socket.getInputStream()));
+        } catch (UnknownHostException e) {
+            Toast.makeText(getApplicationContext(), "Unknown Host: 172.17.39.164",
+                    Toast.LENGTH_SHORT).show();
+        } catch  (IOException e) {
+            Toast.makeText(getApplicationContext(), "No I/O",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
