@@ -9,13 +9,12 @@
     tools:showIn="@layout/app_bar_main">
 
 
-
     <fragment
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/grey"
+        android:layout_marginTop="228dp"
         app:defaultNavHost="true"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -24,7 +23,7 @@
         app:navGraph="@navigation/mobile_navigation" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/scoreText"
         android:layout_width="50dp"
         android:layout_height="43dp"
         android:layout_marginTop="60dp"
@@ -53,7 +52,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/teamNumberText"
         android:layout_width="50dp"
         android:layout_height="43dp"
         android:layout_marginTop="17dp"
@@ -81,31 +80,13 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView4"
+    <CheckBox
+        android:id="@+id/checkBox2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:text="Climb Score:"
-        android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="0.087"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="50dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="106dp"
-        android:digits="1234567890"
-        android:ems="10"
-        android:hint="0"
-        android:inputType="textPersonName"
-        android:lines="1"
-        android:maxLength="4"
-        android:textSize="12dp"
-        app:layout_constraintHorizontal_bias="0.4"
+        android:layout_marginTop="196dp"
+        android:text="Climbing RP"
+        app:layout_constraintHorizontal_bias="0.122"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -114,17 +95,117 @@
         android:id="@+id/checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="192dp"
-        android:text="RP?"
-        app:layout_constraintHorizontal_bias="0.115"
+        android:layout_marginTop="260dp"
+        android:text="Bonus RP 2"
+        app:layout_constraintHorizontal_bias="0.12"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/checkBox3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="228dp"
+        android:text="Bonus RP 1"
+        app:layout_constraintHorizontal_bias="0.12"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="176dp"
+        android:text="Sources of RP:"
+        android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0.127"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="176dp"
+        android:text="Win/Loss:"
+        android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0.778"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="90dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="196dp"
+        app:layout_constraintHorizontal_bias="0.844"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioButton
+            android:id="@+id/winButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Win" />
+
+        <RadioButton
+            android:id="@+id/lossButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Loss" />
+
+        <RadioButton
+            android:id="@+id/drawButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Draw" />
+    </RadioGroup>
+
+    <CheckBox
+        android:id="@+id/climbBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:text="Climb?"
+        app:layout_constraintHorizontal_bias="0.761"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/autoBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Autonomous?"
+        app:layout_constraintHorizontal_bias="0.882"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="332dp"
+        android:text="Send That Info!"
+        app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" /><![CDATA[
+
+
 
     tools:layout_editor_absoluteX="343dp"
         tools:layout_editor_absoluteY="109dp" />
     tools:layout_editor_absoluteX="37dp"
         tools:layout_editor_absoluteY="120dp" />
+
 
 ]]>
 </androidx.constraintlayout.widget.ConstraintLayout>
