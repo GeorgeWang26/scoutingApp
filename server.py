@@ -10,26 +10,34 @@ import db
 # <Thread(pymongo_server_monitor_thread, started daemon 123145438015488)>
 # <Thread(pymongo_kill_cursors_thread, started daemon 123145443270656)>
 
-port = 4266
+port = 4269
 
 threadList = []
 
-threadToClose = ''
 
 class clientThreading(threading.Thread):
+
     def __init__(self, client, addr):
         threading.Thread.__init__(self)
         self.client = client
         self.addr = addr
+        self.terminate = False
         print('new connection from', self.addr)
 
     def run(self):
         try:
             while True:
+                # this is useless 99% the case, however, still good to have for the 1%
+                if self.terminate:
+                    break
                 msg = self.client.recv(150).decode('utf-8')
                 # print('==none', str(msg == None),
                 #       '      == empty string ', str(msg == ''))
+                if self.terminate:
+                    break
                 if msg == '':
+                    # if self.terminate:
+                    #     break
                     continue
                 print(msg)
                 splitMsg = msg.split(',', 1)
@@ -110,12 +118,17 @@ s.bind(('0.0.0.0', port))
 
 
 def terminateAllThreads():
-    print('terminating', len(threadList))
+    # print('terminating', len(threadList))
     i = 1
     for thread in threadList:
-        print(thread, i, '\n')
-        thread.join()
+        print('terminating', len(threadList), threadList)
+        print(thread, i, '')
+        print(type(thread))
+        thread.terminate = True
+        # thread.join()
+        print('closed', i,'\n')
         i += 1
+    print('out of for')
 
 try:
     while True:

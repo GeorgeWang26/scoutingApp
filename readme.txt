@@ -1,1 +1,1 @@
-use driver to veiw data in database
+use driver to veiw data in database, as if they were requested from client

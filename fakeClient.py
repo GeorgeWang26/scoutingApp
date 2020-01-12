@@ -3,7 +3,7 @@ import socket
 import time
 
 client = socket.socket()
-client.connect(('172.17.39.164', 4266))
+client.connect(('172.17.39.164', 4269))
 
 data = 'POST, teamNumber: 7476, compName: Carleton, scoutTeam: 5024, auto: true, score: 100, bonusRP: true, climb: true, result: 2, totalRP:4'
 client.send(bytes(data, 'utf-8'))
@@ -11,6 +11,9 @@ recieve = client.recv(150).decode('utf-8')
 while recieve == '':
     recieve = client.recv(150).decode('utf-8')
 print(data, '\n' + recieve, '\n\n')
+
+
+time.sleep(10)
 
 data = 'GET, getCompetetions, teamNumber: 7476'
 client.send(bytes(data, 'utf-8'))
@@ -40,7 +43,7 @@ while recieve == '':
     recieve = client.recv(150).decode('utf-8')
 print(data, '\n' + recieve, '\n\n')
 
-data = 'BYE'
-client.send(bytes(data, 'utf-8'))
+# data = 'BYE'
+# client.send(bytes(data, 'utf-8'))
 
 client.close()
