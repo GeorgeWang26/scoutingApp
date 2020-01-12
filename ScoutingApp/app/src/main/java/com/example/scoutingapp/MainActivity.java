@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        open = true;
         System.out.println(open);
 
         Intent intent = getIntent();
