@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
     CheckBox gotClimbRPBox;
     CheckBox gotBonusRPBox;
-    CheckBox gotBonusRPBox2;
 
     private AppBarConfiguration mAppBarConfiguration;
     @Override
@@ -88,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
 
         gotClimbRPBox = (CheckBox) findViewById(R.id.climbingRPBox);
         gotBonusRPBox = (CheckBox) findViewById(R.id.bonusRPBox);
-        gotBonusRPBox2 = (CheckBox) findViewById(R.id.bonusRPBox2);
 
         winGroup = (RadioGroup) findViewById(R.id.radioGroup);
 
@@ -147,13 +145,10 @@ public class MainActivity extends AppCompatActivity {
                     if(gotBonusRPBox.isChecked()){
                         bonusRP++;
                     }
-                    if(gotBonusRPBox2.isChecked()){
-                        bonusRP++;
-                    }
 
                     RPGained += bonusRP;
 
-                    dataToSend += "teamNumber: " +teamNumber;
+                    dataToSend += "teamNumber: 7476";
                     dataToSend += ", compName: Carleton";
                     dataToSend += ", scoutTeam: " +opponentNumber;
                     dataToSend += ", auto: " +canAutoBox.isChecked();
@@ -162,6 +157,18 @@ public class MainActivity extends AppCompatActivity {
                     dataToSend += ", bonusRP: " +bonusRP;
                     dataToSend += ", result: " +result;
                     dataToSend += ", totalRP:" +RPGained;
+
+                    teamNumberField.setText("7476");
+                    opponentNumberField.setText("");
+                    scoredPointsField.setText("0");
+
+                    canClimbBox.setSelected(false);
+                    canAutoBox.setSelected(false);
+
+                    gotClimbRPBox.setSelected(false);
+                    gotBonusRPBox.setSelected(false);
+
+                    winGroup.clearCheck();
 
                     new Thread(new Thread3(dataToSend)).start();
 
