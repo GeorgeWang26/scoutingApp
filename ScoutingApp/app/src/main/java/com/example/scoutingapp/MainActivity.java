@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
     public void listenSocket(){
 //Create socket connection
         try{
-            socket = new Socket("172.17.39.164", 4258);
+            socket = new Socket("172.17.39.164", 4265);
             out = new PrintWriter(socket.getOutputStream(),
                     true);
             in = new BufferedReader(new InputStreamReader(
