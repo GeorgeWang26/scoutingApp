@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home)
+                R.id.nav_home, R.id.nav_output)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -281,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
     public void listenSocket(){
 //Create socket connection
         try{
-            socket = new Socket("172.17.39.164", 4258);
+            socket = new Socket("172.17.39.164", 4266);
             out = new PrintWriter(socket.getOutputStream(),
                     true);
             in = new BufferedReader(new InputStreamReader(
