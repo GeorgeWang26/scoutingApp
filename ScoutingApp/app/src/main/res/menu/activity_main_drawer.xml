@@ -6,7 +6,6 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-<<<<<<< HEAD
             android:icon="@drawable/ic_record"
             android:title="Record Data"
             />
@@ -16,14 +15,6 @@
             android:icon="@drawable/ic_record"
             android:title="Info on Other Teams"
         />
-=======
-            android:icon="@drawable/ic_record_data"
-            android:title="Record Data" />
-        <item
-            android:id="@+id/nav_output"
-            android:icon="@drawable/ic_output"
-            android:title="Data on other teams" />
->>>>>>> d6924ca682474023da176a28cd02a4b63aee9d7b
     </group>
 
 </menu>
