@@ -1,14 +1,14 @@
-package com.example.scoutingapp.ui.home;
+package com.example.scoutingapp.ui.output;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HomeViewModel extends ViewModel {
+public class OutputViewModel extends ViewModel {
 
-    public MutableLiveData<String> mText;
+    private MutableLiveData<String> mText;
 
-    public HomeViewModel() {
+    public OutputViewModel() {
         mText = new MutableLiveData<>();
     }
 
