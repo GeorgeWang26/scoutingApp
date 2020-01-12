@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
                     dataToSend += "teamNumber: " +teamNumber;
                     dataToSend += ", compName: Carleton";
-                    dataToSend += ", scoutName: " +opponentNumber;
+                    dataToSend += ", scoutTeam: " +opponentNumber;
                     dataToSend += ", auto: " +canAutoBox.isChecked();
                     dataToSend += ", score: " +scoredPoints;
                     dataToSend += ", climb: " +canClimbBox.isChecked();
