@@ -38,7 +38,7 @@ public class Main2Activity extends AppCompatActivity {
             public void onClick(View v) {
                 //Start your second activity
                 compName = compNameField.getText().toString().toLowerCase();
-                if(!compName.equals(null)) {
+                if(!compName.equals("")) {
                     Intent intent = new Intent(Main2Activity.this, MainActivity.class);
                     intent.putExtra(EXTRA_MESSAGE, compName);
                     startActivity(intent);

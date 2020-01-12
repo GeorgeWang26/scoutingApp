@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     boolean connected;
 
     String SERVER_IP = "172.17.39.164";
-    int SERVER_PORT = 4261;
+    int SERVER_PORT = 4263;
 
     PrintWriter out;
     BufferedReader in;
@@ -58,7 +58,11 @@ public class MainActivity extends AppCompatActivity {
     CheckBox gotClimbRPBox;
     CheckBox gotBonusRPBox;
 
+    boolean open;
     String compName;
+
+    PrintWriter output;
+    BufferedReader input;
 
     private AppBarConfiguration mAppBarConfiguration;
     @Override
@@ -78,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        System.out.println(open);
 
         Intent intent = getIntent();
         compName = intent.getStringExtra(Main2Activity.EXTRA_MESSAGE);
@@ -168,7 +174,6 @@ public class MainActivity extends AppCompatActivity {
                     new Thread(new Thread3(dataToSend)).start();
 
 
-
                 }
                 if(!connected){
                     Toast.makeText(getApplicationContext(), "Error: No connection",
@@ -178,11 +183,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private PrintWriter output;
-    private BufferedReader input;
+    @Override
+    protected void onPause(){
+        super.onPause();
+        System.out.println("App Suspended");
+        new Thread(new Thread3("BYE")).start();
+        open = false;
+    }
+
+
     class Thread1 implements Runnable {
         public void run() {
             Socket socket;
+            if(!open) return;
             try {
                 socket = new Socket(SERVER_IP, SERVER_PORT);
                 connected = true;
@@ -232,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         public void run() {
+            System.out.println(message);
             output.write(message);
             output.flush();
             runOnUiThread(new Runnable() {
