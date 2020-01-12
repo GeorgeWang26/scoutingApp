@@ -29,7 +29,7 @@ class clientThreading(threading.Thread):
             while True:
                 # this is useless 99% the case, however, still good to have for the 1%
                 if self.terminate:
-                    break
+                    break    
                 msg = self.client.recv(150).decode('utf-8')
                 # print('==none', str(msg == None),
                 #       '      == empty string ', str(msg == ''))
