@@ -132,13 +132,13 @@ public class MainActivity extends AppCompatActivity {
                         !opponentNumber.equals("")){
 
                     if(buttonId == winButton.getId()){
-                        result = "Win";
+                        result = "2";
                         RPGained += 2;
                     }else if(buttonId == drawButton.getId()){
-                        result = "Draw";
+                        result = "1";
                         RPGained ++;
                     }else{
-                        result = "Loss";
+                        result = "0";
                     }
 
                     if(gotClimbRPBox.isChecked()){
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
                     dataToSend += ", climb: " +canClimbBox.isChecked();
                     dataToSend += ", bonusRP: " +bonusRP;
                     dataToSend += ", result: " +result;
-                    dataToSend += ", Total RP Gain:" +RPGained;
+                    dataToSend += ", totalRP:" +RPGained;
 
                     new Thread(new Thread3(dataToSend)).start();
 
