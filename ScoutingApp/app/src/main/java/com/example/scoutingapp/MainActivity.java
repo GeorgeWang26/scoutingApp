@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     boolean connected;
 
     String SERVER_IP = "172.17.39.164";
-    int SERVER_PORT = 4263;
+    int SERVER_PORT = 4264;
 
     PrintWriter out;
     BufferedReader in;
@@ -190,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Thread3("BYE")).start();
         open = false;
     }
+    
 
 
     class Thread1 implements Runnable {
