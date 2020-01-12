@@ -1,5 +1,6 @@
 package com.example.scoutingapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import androidx.navigation.NavController;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     boolean connected;
 
     String SERVER_IP = "172.17.39.164";
-    int SERVER_PORT = 4258;
+    int SERVER_PORT = 4261;
 
     PrintWriter out;
     BufferedReader in;
@@ -57,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     CheckBox gotClimbRPBox;
     CheckBox gotBonusRPBox;
 
+    String compName;
+
     private AppBarConfiguration mAppBarConfiguration;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        Intent intent = getIntent();
+        compName = intent.getStringExtra(Main2Activity.EXTRA_MESSAGE);
+
+        Thread1 = new Thread(new Thread1());
+        Thread1.start();
+
         winButton = (RadioButton) findViewById(R.id.winButton);
         lossButton = (RadioButton) findViewById(R.id.lossButton);
         drawButton = (RadioButton) findViewById(R.id.drawButton);
@@ -94,8 +103,6 @@ public class MainActivity extends AppCompatActivity {
 
         teamNumberField.setEnabled(false);
 
-        Thread1 = new Thread(new Thread1());
-        Thread1.start();
 
         Button sendButton = (Button)findViewById(R.id.button);
         sendButton.setOnClickListener(new View.OnClickListener(){
@@ -136,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     dataToSend += "teamNumber: 7476";
-                    dataToSend += ", compName: Carleton";
+                    dataToSend += ", compName: " +compName;
                     dataToSend += ", scoutTeam: " +opponentNumber;
                     dataToSend += ", auto: " +canAutoBox.isChecked();
                     dataToSend += ", score: " +scoredPoints;
@@ -157,7 +164,10 @@ public class MainActivity extends AppCompatActivity {
 
                     winGroup.clearCheck();
 
+
                     new Thread(new Thread3(dataToSend)).start();
+
+
 
                 }
                 if(!connected){
