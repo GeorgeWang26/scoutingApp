@@ -89,6 +89,7 @@
         android:inputType="textPersonName"
         android:digits="1234567890"
         android:text="7476"
+        android:editable="false"
         android:lines="1"
         android:maxLength="4"
         android:textSize="12dp"
