@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     boolean connected;
 
     String SERVER_IP = "172.17.39.164";
-    int SERVER_PORT = 4264;
+    int SERVER_PORT = 4265;
 
     PrintWriter out;
     BufferedReader in;
@@ -175,7 +175,13 @@ public class MainActivity extends AppCompatActivity {
 
 
                 }
-                if(!connected){
+                else if (scoredPoints.equals("") || opponentNumber.equals(""))
+                {
+                    Toast.makeText(getApplicationContext(), "Please fill in score or opponent team number!",
+                            Toast.LENGTH_SHORT).show();
+
+                }
+                else if(!connected){
                     Toast.makeText(getApplicationContext(), "Error: No connection",
                             Toast.LENGTH_SHORT).show();
                 }
@@ -190,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Thread3("BYE")).start();
         open = false;
     }
-    
+
 
 
     class Thread1 implements Runnable {
