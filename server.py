@@ -10,8 +10,11 @@ import db
 # <Thread(pymongo_server_monitor_thread, started daemon 123145438015488)>
 # <Thread(pymongo_kill_cursors_thread, started daemon 123145443270656)>
 
-port = 4257
+port = 4266
 
+threadList = []
+
+threadToClose = ''
 
 class clientThreading(threading.Thread):
     def __init__(self, client, addr):
@@ -28,11 +31,13 @@ class clientThreading(threading.Thread):
                 #       '      == empty string ', str(msg == ''))
                 if msg == '':
                     continue
+                print(msg)
                 splitMsg = msg.split(',', 1)
                 prefix = splitMsg[0]
                 if prefix == 'BYE':
                     print('closing the client', self.addr)
                     self.client.close()
+                    # self.join()                   not doable 
                     break
                 elif prefix == 'POST':
                     data = splitMsg[1]
@@ -51,7 +56,7 @@ class clientThreading(threading.Thread):
                                             processed[6].split(':')[1] == 'true',
                                             int(processed[7].split(':')[1]),
                                             int(processed[8].split(':')[1]))
-                    print(result)
+                    # print(result)
                     # teamNumber: 7476, compName: Carleton, scoutTeam: 5024, auto: true, score: 100, bonusRP: true, climb: true, result: 2, totalRP:4
                     # teamNumber, compName, scoutTeam, auto, score, bonusRP, climb, result, totalRP
                     # store data in db
@@ -76,14 +81,22 @@ class clientThreading(threading.Thread):
                                                         processed[1].split(':')[1],
                                                         int(processed[2].split(':')[1]),
                                                         int(processed[3].split(':')[1]))
-                    
-                    print(result)
-                    # send data from db to android app
-        except Exception as e:
-            print(e)
+                print('outsiddeeeeeeeeeeeeeee   ', result)
+                if result == '':
+                    result = 'not found'
+                # print(result)
+                self.client.send(bytes(result, 'utf-8'))
+                # send data from db to android app
+        except KeyboardInterrupt as e:
+            print('keyboard interrupt')
             # this line might be problemactic since the connection is alrady closed by client
+        # except
+        try:
+            print('client connection ends', self.addr)
             self.client.close()
-            print('client connection ends')
+        except KeyboardInterrupt as e:
+            print('one more exception from keyboard')
+
 
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -95,15 +108,28 @@ s.close()
 s = socket.socket()
 s.bind(('0.0.0.0', port))
 
+
+def terminateAllThreads():
+    print('terminating', len(threadList))
+    i = 1
+    for thread in threadList:
+        print(thread, i, '\n')
+        thread.join()
+        i += 1
+
 try:
     while True:
+        print(threadList)
         print('alive threads     is here loop', threading.activeCount())
         s.listen(1)
         c, adr = s.accept()
         print('alive threads     after accept', threading.activeCount())
         clientThread = clientThreading(c, adr)
         clientThread.start()
-except Exception as e:
-    print(e)
+        threadList.append(clientThread)
+except KeyboardInterrupt as e:
     s.close()
-    print('close server')
+    print('closed server\n\n')
+    print(threadList)
+    terminateAllThreads()
+    print('threads terminated')

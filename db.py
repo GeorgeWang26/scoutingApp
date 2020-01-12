@@ -94,6 +94,8 @@ def checkScoutTeam(teamNumber, compName, scoutTeam):
 
 
 def recordGame(teamNumber, compName, scoutTeam, auto, score, bonusRP, climb, result, totalRP):
+    compName = compName.lower()
+
     '''
     record game data
     '''
@@ -152,6 +154,7 @@ def getCompetetions(teamNumber):
 
 
 def getTeams(teamNumber, compName):
+    compName = compName.lower()
     user = User.objects(teamNumber=teamNumber).first()
     teams = ''
     for comp in user.competetions:
@@ -159,10 +162,12 @@ def getTeams(teamNumber, compName):
             for team in comp.teams:
                 teams += str(team.scoutTeamNumber) + ','
             teams = teams[:-1]
-            return teams
+            break
+    return teams
 
 
 def getGeneralTeamInfo(teamNumber, compName, scoutTeam):
+    compName = compName.lower()
     user = User.objects(teamNumber=teamNumber).first()
     info = ''
     for comp in user.competetions:
@@ -180,10 +185,12 @@ def getGeneralTeamInfo(teamNumber, compName, scoutTeam):
                     info += 'climbCount:' + str(team.climbCount) + ','
                     info += 'totalRP:' + str(team.totalRP) + ','
                     info = info[:-1]
-                    return info
+                    break
+    return info
 
 
 def getSpecificGameInfo(teamNumber, compName, scoutTeam, gameNum):
+    compName = compName.lower()
     user = User.objects(teamNumber=teamNumber).first()
     info = ''
     for comp in user.competetions:
@@ -200,7 +207,8 @@ def getSpecificGameInfo(teamNumber, compName, scoutTeam, gameNum):
                             info += 'result:' + str(game.result) + ','
                             info += 'totalRP:' + str(game.totalRP) + ','
                             info = info[:-1]
-                            return info
+                            break
+    return info
 
 
 if __name__ == '__main__':
