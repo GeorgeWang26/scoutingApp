@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    RadioGroup winGroup;
+
     RadioButton winButton;
     RadioButton lossButton;
     RadioButton drawButton;
@@ -30,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
 
     CheckBox canClimbBox;
     CheckBox canAutoBox;
+
+    CheckBox gotClimbRPBox;
+    CheckBox gotBonusRPBox;
+    CheckBox gotBonusRPBox2;
 
     private AppBarConfiguration mAppBarConfiguration;
     @Override
@@ -61,7 +67,11 @@ public class MainActivity extends AppCompatActivity {
         canClimbBox = (CheckBox) findViewById(R.id.climbBox);
         canAutoBox = (CheckBox) findViewById(R.id.autoBox);
 
-        RadioGroup winGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        gotClimbRPBox = (CheckBox) findViewById(R.id.climbingRPBox);
+        gotBonusRPBox = (CheckBox) findViewById(R.id.bonusRPBox);
+        gotBonusRPBox2 = (CheckBox) findViewById(R.id.bonusRPBox2);
+
+        winGroup = (RadioGroup) findViewById(R.id.radioGroup);
 
         winGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
@@ -87,8 +97,24 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                int RPGained = 0;
                 String dataToSend = "";
-                if()
+                String teamNumber = teamNumberField.getText().toString();
+                String scoredPoints = scoredPointsField.getText().toString();
+                int buttonId = winGroup.getCheckedRadioButtonId();
+                if(buttonId != -1 &&
+                        !teamNumber.equals("") &&
+                        !scoredPoints.equals("")){
+
+                    if(buttonId == winButton.getId()){
+                        RPGained += 2;
+                    }else if(buttonId == drawButton.getId()){
+                        RPGained += 1;
+                    }
+                        
+                    Toast.makeText(getApplicationContext(), "choice: Loss",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
