@@ -44,20 +44,40 @@ class User(Document):
 
 
 def addUser(teamNumber):
+    """add user(team) into db
+    
+    Arguments:
+        teamNumber {int} -- your team number
+    
+    Returns:
+        'done' or 'user already exist'
+    """
+
+    user = User.objects(teamNumber = teamNumber).first()
+    if user:
+        return 'user already exist'
+
     User(teamNumber=teamNumber).save()
+    return 'done'
 
 
 # returns competetion
 def checkCompetetion(teamNumber, compName):
-    '''
-    return the competetion object 
-    '''
-
+    """check if competition exist, if not then create one
+    
+    Arguments:
+        teamNumber {int} -- your team number
+        compName {string} -- competition name
+    
+    Returns:
+        competition object -- the competition found/created
+    """
+    
     # checking user should not be needed if its for one team only
     user = User.objects(teamNumber=teamNumber).first()
-    # if not user:
-    #     return 'team not exist'
-    #
+    if not user:
+        return 'team not exist'
+    
     for comp in user.competetions:
         if comp.competetionName == compName:
             # has competetion already
@@ -70,16 +90,23 @@ def checkCompetetion(teamNumber, compName):
 
 
 def checkScoutTeam(teamNumber, compName, scoutTeam):
-    '''
-    return the scouting team object
-    '''
+    """check if team being scouted exist, if no then create one
+    
+    Arguments:
+        teamNumber {int} -- your team number
+        compName {string} -- competetion name
+        scoutTeam {int} -- team being scouted
+    
+    Returns:
+        team object -- the team found/created
+    """
 
     # checking user should not be needed if its for one team only
     user = User.objects(teamNumber=teamNumber).first()
-    # if not user:
-    #     return 'team not exist'
-    #
-    # this should definitly return a competetion
+    if not user:
+        return 'team not exist'
+    
+    # this should definitly return a competetion, because is called after checkCompetetion()
     for comp in user.competetions:
         if comp.competetionName == compName:
             for team in comp.teams:
@@ -94,24 +121,41 @@ def checkScoutTeam(teamNumber, compName, scoutTeam):
 
 
 def recordGame(teamNumber, compName, scoutTeam, auto, score, bonusRP, climb, result, totalRP):
+    """store game result in db
+    
+    Arguments:
+        teamNumber {int} -- your team number
+        compName {string} -- the competetion name
+        scoutTeam {int} -- team being scouted
+        auto {boolean} -- did autonomous
+        score {int} -- total score in game
+        bonusRP {boolean} -- get bonus RP 
+        climb {boolean} -- climbing
+        result {int} -- 0 lose  1 draw  2 win
+        totalRP {int} -- total RP earned
+    
+    Returns:
+        'done' -- finished
+        OR 
+        ''(empty string) -- something wrong
+    """    
+    
+    # competetion name not case sensitive 
     compName = compName.lower()
-
-    '''
-    record game data
-    '''
+    
     # checking user should not be needed if its for one team only
     user = User.objects(teamNumber=teamNumber).first()
     if not user:
         return 'team not exist'
-    #
+    
     checkCompetetion(teamNumber, compName)
     checkScoutTeam(teamNumber, compName, scoutTeam)
     # both competetion and scoutTeam should be in the db
     # update user object
     user = User.objects(teamNumber=teamNumber).first()
+    
     # creat a new game
-    newGame = Game(autonomouse=auto, score=score, climb=climb,
-                   bonusRP=bonusRP, result=result, totalRP=totalRP)
+    newGame = Game(autonomouse=auto, score=score, climb=climb, bonusRP=bonusRP, result=result, totalRP=totalRP)
 
     for each in user.competetions:
         if each.competetionName == compName:
@@ -142,7 +186,7 @@ def recordGame(teamNumber, compName, scoutTeam, auto, score, bonusRP, climb, res
                     user.save()
                     return 'done'
 
-
+# user name (team number) shouldn't need to be checked here, since they can alreay log in 
 def getCompetetions(teamNumber):
     user = User.objects(teamNumber=teamNumber).first()
     competetions = ''
@@ -169,46 +213,44 @@ def getTeams(teamNumber, compName):
 def getGeneralTeamInfo(teamNumber, compName, scoutTeam):
     compName = compName.lower()
     user = User.objects(teamNumber=teamNumber).first()
-    info = ''
+    teamInfo = ''
     for comp in user.competetions:
         if comp.competetionName == compName:
             for team in comp.teams:
                 if team.scoutTeamNumber == scoutTeam:
-                    info += 'totalGame:' + str(team.totalGames) + ','
-                    info += 'scorePerGame:' + str(team.scorePerGame) + ','
-                    info += 'winCount:' + str(team.winCount) + ','
-                    info += 'loseCount:' + str(team.loseCount) + ','
-                    info += 'drawCount:' + str(team.drawCount) + ','
-                    info += 'autonomouseCount:' + \
-                        str(team.autonomouseCount) + ','
-                    info += 'bonusRPCount:' + str(team.bonusRPCount) + ','
-                    info += 'climbCount:' + str(team.climbCount) + ','
-                    info += 'totalRP:' + str(team.totalRP) + ','
-                    info = info[:-1]
+                    teamInfo += 'totalGame:' + str(team.totalGames) + ','
+                    teamInfo += 'scorePerGame:' + str(team.scorePerGame) + ','
+                    teamInfo += 'winCount:' + str(team.winCount) + ','
+                    teamInfo += 'loseCount:' + str(team.loseCount) + ','
+                    teamInfo += 'drawCount:' + str(team.drawCount) + ','
+                    teamInfo += 'autonomouseCount:' + str(team.autonomouseCount) + ','
+                    teamInfo += 'bonusRPCount:' + str(team.bonusRPCount) + ','
+                    teamInfo += 'climbCount:' + str(team.climbCount) + ','
+                    teamInfo += 'totalRP:' + str(team.totalRP) + ','
+                    teamInfo = teamInfo[:-1]
                     break
-    return info
+    return teamInfo
 
 
 def getSpecificGameInfo(teamNumber, compName, scoutTeam, gameNum):
     compName = compName.lower()
     user = User.objects(teamNumber=teamNumber).first()
-    info = ''
+    gameInfo = ''
     for comp in user.competetions:
         if comp.competetionName == compName:
             for team in comp.teams:
                 if team.scoutTeamNumber == scoutTeam:
                     for game in team.games:
                         if game.gameNumber == gameNum:
-                            info += 'autonomouse:' + \
-                                str(game.autonomouse) + ','
-                            info += 'score:' + str(game.score) + ','
-                            info += 'bonusRP:' + str(game.bonusRP) + ','
-                            info += 'climb:' + str(game.climb) + ','
-                            info += 'result:' + str(game.result) + ','
-                            info += 'totalRP:' + str(game.totalRP) + ','
-                            info = info[:-1]
+                            gameInfo += 'autonomouse:' + str(game.autonomouse) + ','
+                            gameInfo += 'score:' + str(game.score) + ','
+                            gameInfo += 'bonusRP:' + str(game.bonusRP) + ','
+                            gameInfo += 'climb:' + str(game.climb) + ','
+                            gameInfo += 'result:' + str(game.result) + ','
+                            gameInfo += 'totalRP:' + str(game.totalRP) + ','
+                            gameInfo = gameInfo[:-1]
                             break
-    return info
+    return gameInfo
 
 
 if __name__ == '__main__':

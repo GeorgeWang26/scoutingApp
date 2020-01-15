@@ -3,7 +3,7 @@ import socket
 import time
 
 client = socket.socket()
-client.connect(('172.17.39.164', 4269))
+client.connect(('192.168.0.15', 4270))
 
 data = 'POST, teamNumber: 7476, compName: Carleton, scoutTeam: 5024, auto: true, score: 100, bonusRP: true, climb: true, result: 2, totalRP:4'
 client.send(bytes(data, 'utf-8'))
