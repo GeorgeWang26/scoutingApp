@@ -234,7 +234,7 @@
         android:layout_width="238dp"
         android:layout_height="190dp"
         android:layout_marginLeft="180dp"
-        android:layout_marginTop="408dp"
+        android:layout_marginTop="385dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/frc_logo" /><![CDATA[

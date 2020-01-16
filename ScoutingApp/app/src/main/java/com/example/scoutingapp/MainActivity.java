@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     boolean connected;
 
     String SERVER_IP = "172.17.39.164";
-    int SERVER_PORT = 4268;
+    int SERVER_PORT = 4269;
 
     PrintWriter out;
     BufferedReader in;
