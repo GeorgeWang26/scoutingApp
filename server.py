@@ -30,7 +30,9 @@ class clientThreading(threading.Thread):
                     # self terminate
                     break
                 msg = self.client.recv(150).decode('utf-8')
-                if not msg:
+                print('raw msg', msg)
+                if msg == '':
+                    print('ended by client')
                     # terminate by client, socket will recv b'', decode into ''
                     break
                 print(msg)
@@ -109,9 +111,10 @@ def terminateAllThreads():
     for thread in threadList:
         print(i, type(thread), thread)
         thread.terminate = True
-        print('closed', i,'\n\n')
+        print('closed', i, '\n\n')
         i += 1
     print('all threads terminated')
+
 
 def removeFromThreads(current):
     i = 0
